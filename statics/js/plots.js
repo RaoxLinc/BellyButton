@@ -58,7 +58,6 @@ function init() {
  	function buildCharts(sample) {
       // 2. Use d3.json to load and retrieve the samples.json file 
 	d3.json("samples.json").then((data) => {
-		console.log(data)
 	  // 3. Create a variable that holds the samples array. 
 		var samples = data.samples;
 	  // 4. Create a variable that filters the samples for the object with the desired sample number.

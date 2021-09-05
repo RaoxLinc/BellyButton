@@ -62,7 +62,7 @@ function init() {
 	  // 3. Create a variable that holds the samples array. 
 		var samples = data.samples;
 	  // 4. Create a variable that filters the samples for the object with the desired sample number.
-		var resultsObject = sample.filter(obj.id == sample);
+		var resultsObject = sample.filter(obj => obj.id == sample);
 	  // 1. Create a variable that filters the metadata array for the object with the desired sample number.
 	  var metadata = data.metadata;	
 	  var resultMeta = metadata.filter(sampleObj => sampleObj.id == sample);

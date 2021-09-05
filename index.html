@@ -22,8 +22,8 @@
       <div class="col-md-2">
         <div class="well">
           <h5>Test Subject ID No.:</h5>
-          <!-- onchange="optionChanged(this.value)" -->
-          <select id="selDataset"></select>
+          <!-- <select id="selDataset"></select> -->
+          <select id="selDataset" onchange="optionChanged(this.value)"></select>
         </div>
         <div class="panel panel-primary">
           <div class="panel-heading">
@@ -32,10 +32,10 @@
           <div id="sample-metadata" class="panel-body"></div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-5">
         <div id="bar"></div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div id="gauge"></div>
       </div>
     </div>
@@ -48,9 +48,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-  <script src="app.js"></script>
-  <script src="data/samples.json"></script>
-  
-</body>
+  <script src="js/plots.js"></script>
+  <script src="samples.json"></script>
 
+</body>
 </html>

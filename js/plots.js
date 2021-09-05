@@ -22,12 +22,13 @@ function init() {
   
   // Initialize the dashboard
   init();
-  
+
   function optionChanged(newSample) {
+	console.log(newSample);
 	// Fetch new data each time a new sample is selected
 	buildMetadata(newSample);
 	buildCharts(newSample);
-	
+
   }
 
   // Demographics Panel 
@@ -42,14 +43,12 @@ function init() {
   
 	  // Use `.html("") to clear any existing metadata
 	  PANEL.html("");
-  
+	  PANEL.append("h6").text(result.location);
 	  // Use `Object.entries` to add each key and value pair to the panel
 	  // Hint: Inside the loop, you will need to use d3 to append new
 	  // tags for each key-value in the metadata.
-	  Object.entries(result).forEach(([key, value]) => {
-		PANEL.append("h6").text(`${key.toUpperCase()}: ${value}`);
+
 	  });
-	});
 	}
 
       // Bar and Bubble charts
@@ -137,12 +136,13 @@ function init() {
 		}
 	};
   
-  // 5. Create the layout for the gauge chart.
-  var gaugeLayout = { 
-	width: 600, height: 450, margin: {t: 0, b: 0}
-  };
+ 	  // 5. Create the layout for the gauge chart.
+  	 var gaugeLayout = { 
+		width: 600, height: 450, margin: {t: 0, b: 0}
+	  };
 
-  // 6. Use Plotly to plot the gauge data and layout.
-  Plotly.newPlot("gauge", [gaugeData], gaugeLayout);
-	});
+ 	 // 6. Use Plotly to plot the gauge data and layout.
+ 	 Plotly.newPlot("gauge", [gaugeData], gaugeLayout);
+		});
 };
+

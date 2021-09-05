@@ -61,12 +61,12 @@ function init() {
 	  // 3. Create a variable that holds the samples array. 
 		var samples = data.samples;
 	  // 4. Create a variable that filters the samples for the object with the desired sample number.
-		var resultsObject = sample.filter(obj => obj.id == sample);
+		var sampleResults = samples.filter(obj => obj.id == sample);
 	  // 1. Create a variable that filters the metadata array for the object with the desired sample number.
-	  var metadata = data.metadata;	
-	  var resultMeta = metadata.filter(sampleObj => sampleObj.id == sample);
+	 	var metadata = data.metadata;	
+	  	var resultMeta = metadata.filter(sampleObj => sampleObj.id == sample);
 	  //  5. Create a variable that holds the first sample in the array.
-		var result = resultsObject[0];	
+		var result = sampleResults[0];	
   	  // 2. Create a variable that holds the first sample in the metadata array.
 		var metaResult = resultMeta[0];
 	  // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.

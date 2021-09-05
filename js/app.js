@@ -1,154 +1,62 @@
-//creating function for all the demographic info
-function demoInfo(id){
-    d3.json("samples.json").then((data)=> {
-        var metadata = data.metadata;
-        console.log(metadata);
+// Use D3 fetch to read the JSON file
+// The data from the JSON file is arbitrarily named importedData as the argument
+d3.json("data/samples.json").then((importedData) => {
 
-        //filter demo info data by id
-        var filterResult = metadata.filter(info => info.id.toString() === id)[0];
+	console.log(importedData);
 
-        var panelBody = d3.select("#sample-metadata");
+	var data = importedData;
 
-        //empty the demo info panel each time before getting new data
-        panelBody.html("");
+	// Dynamically add test Subject ID No. to the dropdown menus
+	var names = data.names;
 
-        Object.entries(filterResult).forEach((key)=>{
-            panelBody.append("p").text(key[0] + ":" + key[1]);
-        });
-    });
-};
+	names.forEach((name) => {
+		d3.select("#selDataset").append("option").text(name);
+	})
 
-//creating function for all the plots
-function plots(id) {
-    // getting data from the json file
-    d3.json("samples.json").then((data)=> {
-        //console.log(data)
-        
-        //filter wfreq value by id
-        var wfreq = data.metadata.filter(f => f.id.toString() === id)[0];
-        wfreq = wfreq.wfreq;
-        console.log("Washing Freq: " + wfreq);
-        
-        // filter samples+ values by id 
-        var samples = data.samples.filter(s => s.id.toString() === id)[0];
-        
-        //console.log("Samples: " + samples);
-  
-        // Getting the top 10 
-        var samplevalues = samples.sample_values.slice(0, 10).reverse();
-        console.log("top 10 sample: " + samplevalues);
-  
-        // get only top 10 otu ids for the plot OTU and reversing it. 
-        var OTU = (samples.otu_ids.slice(0, 10)).reverse();
-        
-        // get the otu id's to the desired form for the plot
-        var OTU_id = OTU.map(d => "OTU " + d)
-  
-        console.log("OTU IDS: " + OTU_id);
-  
-  
-        // get the top 10 labels for the plot and reversing it.
-        var labels = samples.otu_labels.slice(0, 10).reverse();
-        console.log("labels: " + labels);
-  
-        // create trace variable for the plot
-        var trace = {
-            x: samplevalues,
-            y: OTU_id,
-            text: labels,
-            marker: {
-              color: 'Blue'},
-            type:"bar",
-            orientation: "h",
-        };
-  
-        // create data variable
-        var data = [trace];
-  
-        // create layout variable to set plots layout
-  
-        // create the bar plot
-        Plotly.newPlot("bar", data);
-      
-        // The bubble chart
-        var trace1 = {
-            x: samples.otu_ids,
-            y: samples.sample_values,
-            mode: "markers",
-            marker: {
-                size: samples.sample_values,
-                color: samples.otu_ids
-            },
-            text: samples.otu_labels
-  
-        };
-  
-        // set the layout for the bubble plot
-        var layout_b = {
-            xaxis:{title: "OTU ID"},
-            height: 600,
-            width: 1200
-        };
-  
-        // creating data variable 
-        var data1 = [trace1];
-  
-        // create the bubble plot
-        Plotly.newPlot("bubble", data1, layout_b); 
-  
-        // The guage chart
-        var data_g = [
-          {
-          domain: { x: [0, 1], y: [0, 1] },
-          value: wfreq,
-          title: {text: `Belly Button Washing Frequency`},
-          type: "indicator",
-          
-          mode: "gauge+number",
-          gauge: { axis: { range: [null, 9] },
-                   steps: [
-                    {range: [0, 1], color: "white"},
-                    {range: [1, 2], color: "white"},
-                    {range: [2, 3], color: "white"},
-                    {range: [3, 4], color: "white"},
-                    {range: [4, 5], color: "white"},
-                    {range: [5, 6], color: "white"},
-                    {range: [6, 7], color: "white"},
-                    {range: [7, 8], color: "white"},
-                    {range: [8, 9], color: "white"}
-                  ]}
-              
-          }
-        ];
-        var layout_g = { 
-            width: 700, 
-            height: 600, 
-            margin: { t: 20, b: 40, l:100, r:100 } 
-          };
-        Plotly.newPlot("gauge", data_g, layout_g);
-      });
-  }  
+	// Initializes the page with default plots
+	function init() {
 
-function init() {
-    //read the data
-    d3.json("samples.json").then((data)=> {
-        //console.log(data);
+		// Choose data for test ID No. 940 plotted as default
+		defaultDataset = data.samples.filter(sample => sample.id === "940")[0];
+		console.log(defaultDataset);
 
-        //get the name id to the dropdown menu
-        data.names.forEach((name) => {
-            d3.select("#selDataset")
-            .append("option")
-            .text(name)
-            .property("value");
-        });
-        plots(data.names[0]);
-        demoInfo(data.names[0]);
-    });
-};
-init();
+		// Select all sample_values, otu_ids and otu_labels of the selected test ID
+		allSampleValuesDefault = defaultDataset.sample_values;
+		allOtuIdsDefault = defaultDataset.otu_ids;
+		allOtuLabelsDefault = defaultDataset.otu_labels;
 
-//change event function
-function optionChanged(id){
-    plots(id);
-    demoInfo(id);
-};
+		// Select the top 10 OTUs for the ID with their sample_values, otu_ids and otu_labels
+		sampleValuesDefault = allSampleValuesDefault.slice(0, 10).reverse();
+		otuIdsDefault = allOtuIdsDefault.slice(0, 10).reverse();
+		otuLabelsDefault = allOtuLabelsDefault.slice(0, 10).reverse();
+
+		console.log(sampleValuesDefault);
+		console.log(otuIdsDefault);
+		console.log(otuLabelsDefault);
+
+
+// BAR CHART
+		// Add trace for the default Data
+		var trace1 = {
+			x: sampleValuesDefault,
+			y: otuIdsDefault.map(outId => `OTU ${outId}`),
+			text: otuLabelsDefault,
+			type: "bar",
+			orientation: "h"
+		};
+
+		// data
+		var barData = [trace1];
+
+		// Apply the group bar mode to the layout
+		var barlayout = {
+			title: `<b>Top 10 OTUs found in selected Test Subject ID No<b>`,
+			xaxis: { title: "Sample Value"},
+			yaxis: { title: "OTU ID"},
+			autosize: false,
+			width: 450,
+			height: 600
+		}
+
+		// Render the plot to the div tag with id "bar"
+		Plotly.newPlot("bar", barData, barlayout);
